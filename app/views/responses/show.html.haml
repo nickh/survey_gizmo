@@ -1,0 +1,17 @@
+%h2 Feedback Time
+
+%p
+  - if @next_question.nil?
+    %h4 All Finished!
+    Thank you for your time and input
+  - else
+    #question
+      %h4 Next Question
+      = @next_question.blurb
+    #answer
+      - form_for(@response) do |f|
+        = hidden_field_tag 'answers[][question_id]', @next_question.id
+        = f.label          'Answer'
+        = text_field_tag   'answers[][blurb]'
+        %br
+        = submit_tag       'Submit'

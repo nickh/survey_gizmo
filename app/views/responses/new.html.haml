@@ -1,0 +1,10 @@
+%h2 Tell Us Who You Are
+
+- form_for(@respondent, :url => {:controller => :responses}) do |f|
+  %p
+    = f.label      :email_address, 'Email Address'
+    = f.text_field :email_address
+    = f.label      :name,           'Name'
+    = f.text_field :name
+  %p
+    = submit_tag   'Get Started'
