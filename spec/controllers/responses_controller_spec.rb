@@ -159,9 +159,23 @@ describe ResponsesController do
       session[:respondent] = @test_respondent
     end
 
+    it 'should redirect to new if there is no respondent in the session' do
+      session[:respondent] = nil
+      post :update, :id => @test_response.id
+      response.should redirect_to(new_response_path)
+    end
+
+    it 'should redirect to new if the respondent and response do not match' do
+      other_response  = Response.create
+      session[:respondent] = @test_respondent
+      post :update, :id => other_response.id
+      response.should redirect_to(new_response_path)
+    end
+
     it 'should add new answers' do
       @test_response.answers.should be_empty
       post :update, :id => @test_response.id, :answers => [{:question_id => 1, :blurb => @test_blurb}]
+      @test_response.reload
       @test_response.answers.should have(1).answer
       answer = @test_response.answers.first
       answer.question_id.should == 1

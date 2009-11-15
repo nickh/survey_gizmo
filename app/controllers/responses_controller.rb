@@ -35,6 +35,15 @@ class ResponsesController < ApplicationController
   end
 
   def update
+    return redirect_to(new_response_path) if @response.nil? || params[:id].to_i != @response.id
+
+    new_answers = params[:answers] || []
+    new_answers.each do |answer_params|
+      answer = Answer.find_or_create_by_question_id_and_response_id(answer_params[:question_id], @response.id)
+      answer.update_attribute(:blurb, answer_params[:blurb])
+    end
+
+    redirect_to(response_path(@response))
   end
 
   private
