@@ -9,21 +9,29 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091114065039) do
+ActiveRecord::Schema.define(:version => 20091115164741) do
 
   create_table "answers", :force => true do |t|
     t.string  "blurb"
     t.integer "question_id"
-    t.integer "responder_id"
+    t.integer "response_id"
   end
+
+  add_index "answers", ["response_id"], :name => "answers_response_index"
 
   create_table "questions", :force => true do |t|
     t.string "blurb"
   end
 
-  create_table "responders", :force => true do |t|
+  create_table "respondents", :force => true do |t|
     t.string "email_address"
     t.string "name"
+  end
+
+  add_index "respondents", ["email_address"], :name => "responders_email_address_index"
+
+  create_table "responses", :force => true do |t|
+    t.integer "respondent_id"
   end
 
 end

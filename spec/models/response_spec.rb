@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "Response" do
-  it "belongs to responder" do
-    Response.should belong_to(:responder)
+  it "belongs to respondent" do
+    Response.should belong_to(:respondent)
   end
 
   it "has many answers" do
