@@ -2,5 +2,5 @@
 # belongs to a question and a responder.
 class Answer < ActiveRecord::Base
   belongs_to :question
-  belongs_to :responder
+  belongs_to :response
 end
