@@ -99,28 +99,86 @@ describe ResponsesController do
   end
 
   describe '#show' do
+    before do
+      @test_respondent = Respondent.create(:email_address => @test_addr, :name => @test_name)
+      @test_response   = @test_respondent.response
+      @test_questions  = (1..5).collect{|i| Question.create(:id => i, :blurb => "Question #{i}")}
+    end
+
     it 'should redirect to new if there is no respondent in the session' do
-      test_response = Response.create
       session[:respondent] = nil
-      get :show, :id => test_response.id
+      get :show, :id => @test_response.id
       response.should redirect_to(new_response_path)
     end
 
     it 'should redirect to new if the respondent and response do not match' do
-      test_respondent = Respondent.create(:email_address => @test_addr, :name => @test_name)
-      test_response   = test_respondent.response
       other_response  = Response.create
-      session[:respondent] = test_respondent
+      session[:respondent] = @test_respondent
       get :show, :id => other_response.id
       response.should redirect_to(new_response_path)
     end
 
     it 'should show the response' do
-      test_respondent = Respondent.create(:email_address => @test_addr, :name => @test_name)
-      test_response   = test_respondent.response
-      session[:respondent] = test_respondent
-      get :show, :id => test_response.id
+      session[:respondent] = @test_respondent
+      get :show, :id => @test_response.id
       response.should render_template('show')
+    end
+
+    describe 'when there are unanswered questions' do
+      before do
+        @test_answers = (1..3).collect{|i| Answer.create(:question_id => i, :response => @test_response)}
+      end
+
+      it 'should have a next question' do
+        get :show, :id => @test_response.id
+        assigns[:next_question].should_not be_nil
+      end
+    end
+
+    describe 'when all questions have been answered' do
+      before do
+        @test_answers = @test_questions.collect{|q| Answer.create(:question_id => q.id, :response => @test_response)}
+      end
+
+      it 'should not have a next question' do
+        get :show, :id => @test_response.id
+        assigns[:next_question].should be_nil
+      end
+    end
+  end
+
+  describe '#update' do
+    before do
+      @test_questions  = (1..5).collect{|i| Question.create(:id => i, :blurb => "Question #{i}")}
+      @test_respondent = Respondent.create(:email_address => @test_addr, :name => @test_name)
+      @test_response   = @test_respondent.response
+      @test_blurb      = 'My final answer'
+      session[:respondent] = @test_respondent
+    end
+
+    it 'should add new answers' do
+      @test_response.answers.should be_empty
+      post :update, :id => @test_response.id, :answers => [{:question_id => 1, :blurb => @test_blurb}]
+      @test_response.answers.should have(1).answer
+      answer = @test_response.answers.first
+      answer.question_id.should == 1
+      answer.blurb.should == @test_blurb
+    end
+
+    it 'should update existing answers' do
+      new_blurb   = @test_blurb + ' is forthcoming'
+      test_answer = @test_response.answers.create(:question_id => 1, :blurb => @test_blurb)
+      @test_response.answers.should have(1).answer
+      post :update, :id => @test_response.id, :answers => [{:question_id => 1, :blurb => new_blurb}]
+      @test_response.answers.should have(1).answer
+      test_answer.reload
+      test_answer.question_id.should == 1
+      test_answer.blurb.should == new_blurb
+    end
+
+    it 'should redirect to show' do
+      post :update, :id => @test_response.id, :answers => [{:question_id => 1, :blurb => @test_blurb}]
+      response.should redirect_to(response_path(@test_response))
     end
   end
 end
