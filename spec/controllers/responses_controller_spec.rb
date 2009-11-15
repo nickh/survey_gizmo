@@ -127,6 +127,7 @@ describe ResponsesController do
     describe 'when there are unanswered questions' do
       before do
         @test_answers = (1..3).collect{|i| Answer.create(:question_id => i, :response => @test_response)}
+        session[:respondent] = @test_respondent
       end
 
       it 'should have a next question' do
@@ -138,10 +139,12 @@ describe ResponsesController do
     describe 'when all questions have been answered' do
       before do
         @test_answers = @test_questions.collect{|q| Answer.create(:question_id => q.id, :response => @test_response)}
+        session[:respondent] = @test_respondent
       end
 
       it 'should not have a next question' do
         get :show, :id => @test_response.id
+        assigns.should have_key(:next_question)
         assigns[:next_question].should be_nil
       end
     end

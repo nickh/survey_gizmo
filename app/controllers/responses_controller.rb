@@ -30,7 +30,8 @@ class ResponsesController < ApplicationController
   end
 
   def show
-    redirect_to(new_response_path) if @response.nil? || params[:id].to_i != @response.id
+    return redirect_to(new_response_path) if @response.nil? || params[:id].to_i != @response.id
+    @next_question = @response.next_question
   end
 
   def update
