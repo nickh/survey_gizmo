@@ -3,4 +3,8 @@
 class Response < ActiveRecord::Base
   belongs_to :respondent
   has_many :answers
+
+  # Return the next unanswered question
+  def next_question
+  end
 end
