@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :responses
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+  map.resources :responses do |responses|
+    responses.resources :answers
+  end
+  map.root :controller => :responses
 end

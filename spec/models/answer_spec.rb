@@ -9,6 +9,18 @@ describe "Answer" do
     Answer.should belong_to(:question)
   end
 
+  it "requires a response" do
+    answer = Answer.new(:question => Question.new)
+    answer.should_not be_valid
+    answer.should have_errors_on(:response)
+  end
+
+  it "requires a question" do
+    answer = Answer.new(:response => Response.new)
+    answer.should_not be_valid
+    answer.should have_errors_on(:question)
+  end
+
   it "allows only one answer to a given question for each response" do
     respondent1 = Respondent.create(:email_address => 'foo@bar.org', :name => 'Foo Bar')
     response1   = respondent1.response

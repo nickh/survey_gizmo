@@ -16,7 +16,7 @@ describe AnswersController do
         get :new, :response_id => @test_response
         assigns.should have_key(:question)
         assigns[:question].should == Question.find(4)
-        response.should render_template(:show)
+        response.should render_template(:new)
       end
     end
 

@@ -20,3 +20,9 @@ Spec::Matchers.define :have_many do |expected|
   failure_message_for_should     {|actual| "expected #{actual.inspect} to have_many #{expected.inspect}"}
   failure_message_for_should_not {|actual| "expected #{actual.inspect} to not have_many #{expected.inspect}"}
 end
+
+Spec::Matchers.define :have_errors_on do |expected|
+  match                          {|actual| !actual.errors_on(:expected).nil?}
+  failure_message_for_should     {|actual| "expected #{actual.inspect} to have errors on #{expected.inspect}"}
+  failure_message_for_should_not {|actual| "expected #{actual.inspect} to not have errors on #{expected.inspect}"}
+end
