@@ -1,11 +1,2 @@
 #q_and_a
-  %h4 Next Question
-  .question
-    = @question.blurb
-  .answer
-    - form_for([@response, @answer]) do |f|
-      = hidden_field_tag 'answer[question_id]', @question.id
-      = f.label          'Answer'
-      = f.text_field     :blurb
-      %br
-      = submit_tag       'Submit'
+  = render :partial => 'form'

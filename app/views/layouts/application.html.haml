@@ -1,0 +1,27 @@
+!!! Transitional
+
+%html{:xmlns => "http://www.w3.org/1999/xhtml", 'xml:lang' => 'en', :lang => 'en'}
+
+%head
+  %meta{'http-equiv' => 'Content-Type', :content => 'text/html; charset=utf-8'}
+
+  = javascript_include_tag :all
+
+  = @content_for_header
+
+  %title Survey Gizmo
+
+  %LINK{'REL' => 'SHORTCUT ICON', 'HREF' => '/favicon.ico'}/
+
+%body
+  #header
+    %h1 Survey Gizmo: You've got answers, we've got questions!
+  #content
+    #flesh
+      - if flash[:error]
+        %p.error=   flash[:error]
+      - if flash[:warning]
+        %p.warning= flash[:warning]
+      - if flash[:notice]
+        %p.notice=  flash[:notice]
+    = yield

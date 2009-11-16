@@ -16,7 +16,20 @@ class AnswersController < ApplicationController
       flash[:error] = "Error adding answer: #{e}"
     end
 
-    redirect_to(@response.next_question.nil?? response_path(@response) : new_response_answer_path(@response))
+    respond_to do |format|
+      format.html {redirect_to(@response.next_question.nil?? response_path(@response) : new_response_answer_path(@response))}
+      format.js do
+        @question = @response.next_question
+        render(:update) do |page|
+          if @question.nil?
+            page.redirect_to response_path(@response)
+          else
+            @answer = Answer.new(:response => @response, :question => @question)
+            page.replace_html 'q_and_a', :partial => 'form'
+          end
+        end
+      end
+    end
   end
 
   private
