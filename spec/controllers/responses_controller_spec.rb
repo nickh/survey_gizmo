@@ -72,7 +72,7 @@ describe ResponsesController do
         existing_response  = existing_respondent.response
         existing_response.should_not be_nil
         post :create, :respondent => {:email_address => @test_addr}
-        response.should redirect_to(response_path(existing_response))
+        response.should redirect_to(new_response_answer_path(existing_response))
       end
     end
 
@@ -83,7 +83,7 @@ describe ResponsesController do
         new_respondent = Respondent.find_by_email_address(@test_addr)
         new_respondent.should_not be_nil
         new_response  = new_respondent.response
-        response.should redirect_to(response_path(new_response))
+        response.should redirect_to(new_response_answer_path(new_response))
       end
     end
 
