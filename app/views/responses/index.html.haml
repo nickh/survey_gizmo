@@ -1,0 +1,10 @@
+%h2 Feedback Responses
+
+%p
+  %h4 All Finished!
+  Thank you for your time and input.  Here's what everyone had to say:
+
+  - @responses.each do |response|
+    %ul
+      %li
+        = link_to(h(response.name + ' <' + response.email_address + '>'), response_path(response))

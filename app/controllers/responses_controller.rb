@@ -1,48 +1,53 @@
 class ResponsesController < ApplicationController
   before_filter :set_response
 
+  # Show responders who have completed a response the list of responses
   def index
-    redirect_to @response.nil?? new_response_path : response_path(@response)
-  end
-
-  def new
-    email_address = session[:respondent].email_address rescue nil
-    name          = session[:respondent].name          rescue nil
-    @respondent   = Respondent.new(:email_address => email_address, :name => name)
-  end
-
-  def create
-    respondent_params = params[:respondent] || {}
-    email_address    = respondent_params[:email_address]
-    if email_address.blank?
-      return redirect_to(new_response_path)
-    elsif existing_respondent = Respondent.find_by_email_address(email_address)
-      session[:respondent] = existing_respondent
-      @response = existing_respondent.response
+    if @response.nil?
+      redirect_to new_response_path
+    elsif @response.next_question
+      redirect_to new_response_answer_path(@response)
     else
-      new_respondent = Respondent.create(respondent_params)
-      session[:respondent] = new_respondent
-      return redirect_to(new_response_path) if new_respondent.new_record?
-      @response = new_respondent.response
+      @responses = Response.find(:all)
+    end
+  end
+
+  # (Re)start a response: find out who would like to respond.
+  # Prepopulate with info from the response id from the session if available.
+  def new
+    default   = Response.find(session[:response_id]) rescue Response.new
+    @response = Response.new(:email_address => default.email_address, :name => default.name)
+  end
+
+  # Create a response: if a session for the specified email address exists,
+  # pick up where they left off; otherwise try to start a new session for
+  # the email address and go back to new if the session/email address is not valid.
+  def create
+    response_params = params[:response] || {}
+    if @response = Response.find_by_email_address(response_params[:email_address])
+      session[:response_id] = @response.id
+    else
+      @response = Response.create(response_params)
+      return redirect_to(new_response_path) if @response.new_record?
+      session[:response_id] = @response.id
     end
 
     redirect_to(@response.next_question.nil?? response_path(@response) : new_response_answer_path(@response))
   end
 
+  # Show a user their finished response.  If it's not their response, go back
+  # to new; and if their response isn't complete, take them to the next question.
   def show
-    redirect_to(new_response_path) if @response.nil? || params[:id].to_i != @response.id
+    if @response.nil? || params[:id].to_i != @response.id
+      redirect_to(new_response_path) 
+    elsif @response.next_question
+      redirect_to(new_response_answer_path(@response))
+    end
   end
 
   private
 
   def set_response
-    if session[:respondent]
-      begin
-        session[:respondent].reload
-        @response = session[:respondent].response
-      rescue
-        nil
-      end
-    end
+    @response = Response.find(session[:response_id]) rescue nil
   end
 end

@@ -1,9 +1,11 @@
-%h2 Feedback Time
+%h2 Feedback Response
 
 %p
-  - if @response.next_question.nil?
-    %h4 All Finished!
-    Thank you for your time and input
-  - else
-    = "You have answered #{@response.answers.count} out of #{Question.count} questions, ready for"
-    = link_to('more?', new_response_answer_path(@response))
+  %h4 All Finished!
+  Thank you for your time and input.  Here's what you had to say:
+
+  - @response.answers.each do |answer|
+    %ul
+      %li
+        .question= answer.question.blurb
+        .answer=   answer.blurb

@@ -7,4 +7,16 @@ class ApplicationController < ActionController::Base
 
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
+
+  before_filter :fix_session_barf
+
+  # Annoying lesson learned: if you stash something in a session that later can't
+  # be marshalled, requests for that session with fail
+  def fix_session_barf
+    begin
+      session[:respondent] = nil
+    rescue Exception => e
+      reset_session
+    end
+  end
 end
