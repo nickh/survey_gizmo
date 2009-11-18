@@ -2,11 +2,10 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe AnswersController do
   before do
-    @test_addr       = 'foo@bar.org'
-    @test_name       = 'Foo Bar'
-    @test_respondent = Respondent.create(:email_address => @test_addr, :name => @test_name)
-    @test_response   = @test_respondent.response
-    @test_questions  = (1..5).collect{|i| Question.create(:id => i, :blurb => "Question #{i}")}
+    @test_addr      = 'foo@bar.org'
+    @test_name      = 'Foo Bar'
+    @test_response  = Response.create(:email_address => @test_addr, :name => @test_name)
+    @test_questions = (1..5).collect{|i| Question.create(:id => i, :blurb => "Question #{i}")}
   end
 
   describe '#new' do

@@ -22,10 +22,8 @@ describe "Answer" do
   end
 
   it "allows only one answer to a given question for each response" do
-    respondent1 = Respondent.create(:email_address => 'foo@bar.org', :name => 'Foo Bar')
-    response1   = respondent1.response
-    respondent2 = Respondent.create(:email_address => 'bar@foo.org', :name => 'Bar Foo')
-    response2   = respondent2.response
+    response1   = Response.create(:email_address => 'foo@bar.org', :name => 'Foo Bar')
+    response2   = Response.create(:email_address => 'bar@foo.org', :name => 'Bar Foo')
     question    = Question.create(:blurb => 'Is this a question?')
     answer1     = Answer.create(:response => response1, :question => question)
     answer2     = Answer.new(:response => response1, :question => question)
