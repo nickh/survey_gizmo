@@ -1,10 +1,12 @@
 %h2 Feedback Responses
 
 %p
-  %h4 All Finished!
   Thank you for your time and input.  Here's what everyone had to say:
 
-  - @responses.each do |response|
-    %ul
-      %li
-        = link_to(h(response.name + ' <' + response.email_address + '>'), response_path(response))
+.responses
+  %ul
+    - @responses.each do |response|
+      %li{:class => cycle('even','odd')}
+        = link_to_function(responder(response), "$('q_and_a_#{response.id}').toggle()")
+        %ul{:class => 'q_and_a', :id => "q_and_a_#{response.id}", :style => "display: none;"}
+          = render :partial => 'answer', :collection => response.answers

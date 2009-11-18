@@ -1,11 +1,7 @@
-%h2 Feedback Response
+%h2 All Finished!
 
 %p
-  %h4 All Finished!
   Thank you for your time and input.  Here's what you had to say:
 
-  - @response.answers.each do |answer|
-    %ul
-      %li
-        .question= answer.question.blurb
-        .answer=   answer.blurb
+  %ul.q_and_a
+    = render :partial => 'answer', :collection => @response.answers

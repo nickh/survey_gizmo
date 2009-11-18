@@ -1,0 +1,46 @@
+!dark_gray     = #333
+!light_gray    = #666
+!off_white     = #aaa
+!white         = #fff
+!border_radius = 10px
+
+li
+  list-style: none
+  padding:    3px
+  
+li.even
+  background-color = !off_white
+li.odd
+  background-color = !white
+
+h1
+  color = !light_gray
+  text-align: center
+
+h2
+  color = !light_gray
+
+body
+  background: url('/images/question_marks.jpg') repeat
+  font-family: Arial, Verdana, sans-serif
+  > div.blurb
+    width:                  80%
+    margin-left:            auto
+    margin-right:           auto
+    margin-top:             20px
+    padding:                10px
+    background-color      = !white
+    border                = "1px solid #{!dark_gray}"
+    -moz-border-radius    = !border_radius
+    -webkit-border-radius = !border_radius
+  div.responses > ul
+    padding-left: 0px
+    > li
+      border                = "1px solid #{!off_white}"
+
+ul.q_and_a
+  > li
+    > div.question
+      font-style:       italic
+    > div.answer
+      padding-left:      10px
