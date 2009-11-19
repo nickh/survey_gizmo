@@ -1,10 +1,10 @@
 %h2 Tell Us Who You Are
 
 - form_for(@response) do |f|
-  %p
+  %fieldset
     = f.label      :email_address, 'Email Address'
     = f.text_field :email_address
     = f.label      :name,          'Name'
     = f.text_field :name
-  %p
+  %fieldset
     = submit_tag   'Get Started'

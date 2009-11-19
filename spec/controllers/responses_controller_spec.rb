@@ -133,20 +133,32 @@ describe ResponsesController do
       response.should redirect_to(new_response_path)
     end
 
-    it 'should redirect to new if the response and response do not match' do
-      other_response  = Response.create(:email_address => 'other_response@example.com', :name => 'Other Response')
-      session[:response_id] = @test_response.id
-      get :show, :id => other_response.id
-      response.should redirect_to(new_response_path)
-    end
-
     describe 'when the response is complete' do
-      it 'should show the response' do
+      before do
         @test_answers = @test_questions.collect{|q| Answer.create(:question_id => q.id, :response => @test_response)}
+      end
+
+      it 'should show the response' do
         session[:response_id] = @test_response.id
         get :show, :id => @test_response.id
         assigns[:response].should == @test_response
         response.should render_template(:show)
+      end
+
+      it "should show someone else's response" do
+        other_response = Response.create(:email_address => 'other_response@example.com', :name => 'Other Response')
+        other_answers  = @test_questions.collect{|q| Answer.create(:question_id => q.id, :response => other_response)}
+        session[:response_id] = @test_response.id
+        get :show, :id => other_response.id
+        assigns[:response].should == other_response
+        response.should render_template(:show)
+      end
+
+      it "should redirect to new if the specified response id does not exist" do
+        other_response = Response.create(:email_address => 'other_response@example.com', :name => 'Other Response')
+        Response.delete(other_response.id)
+        get :show, :id => other_response.id
+        response.should redirect_to(new_response_path)
       end
     end
 

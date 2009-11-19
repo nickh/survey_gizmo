@@ -1,7 +1,9 @@
 %h2 All Finished!
 
 %p
-  Thank you for your time and input.  Here's what you had to say:
+  Thank you for your time and input.  Here's what
+  = @response.name
+  had to say:
 
   %ul.q_and_a
     = render :partial => 'answer', :collection => @response.answers

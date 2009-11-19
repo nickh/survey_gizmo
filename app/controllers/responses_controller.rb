@@ -35,13 +35,16 @@ class ResponsesController < ApplicationController
     redirect_to(@response.next_question.nil?? response_path(@response) : new_response_answer_path(@response))
   end
 
-  # Show a user their finished response.  If it's not their response, go back
-  # to new; and if their response isn't complete, take them to the next question.
+  # If the current user has completed their response, show them their own or someone
+  # else's; otherwise take them to the next question.
   def show
-    if @response.nil? || params[:id].to_i != @response.id
-      redirect_to(new_response_path) 
+    if @response.nil?
+      redirect_to(new_response_path)
     elsif @response.next_question
       redirect_to(new_response_answer_path(@response))
+    elsif params[:id]
+      @response = Response.find(params[:id]) rescue nil
+      redirect_to(new_response_path) if @response.nil?
     end
   end
 

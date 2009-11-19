@@ -1,10 +1,11 @@
-%h4 Next Question
+%h2 Next Question
 .question
   = @question.blurb
 .answer
   - remote_form_for([@response, @answer]) do |f|
-    = hidden_field_tag 'answer[question_id]', @question.id
-    = f.label          'Answer'
-    = f.text_field     :blurb
-    %br
-    = submit_tag       'Submit'
+    %fieldset
+      = hidden_field_tag 'answer[question_id]', @question.id
+      = f.label          'Answer'
+      = f.text_field     :blurb
+    %fieldset
+      = submit_tag       'Submit'

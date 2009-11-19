@@ -1,12 +1,10 @@
 %h2 Feedback Responses
 
-%p
-  Thank you for your time and input.  Here's what everyone had to say:
+%p Thank you for your time and input.  Here's what everyone had to say:
 
-.responses
-  %ul
-    - @responses.each do |response|
-      %li{:class => cycle('even','odd')}
-        = link_to_function(responder(response), "$('q_and_a_#{response.id}').toggle()")
-        %ul{:class => 'q_and_a', :id => "q_and_a_#{response.id}", :style => "display: none;"}
-          = render :partial => 'answer', :collection => response.answers
+%ul.responses
+  - @responses.each do |response|
+    %li{:class => cycle('even','odd')}
+      = link_to_function(responder(response), "$('q_and_a_#{response.id}').toggle()", :href => response_path(response))
+      %ul{:class => 'q_and_a', :id => "q_and_a_#{response.id}", :style => "display: none;"}
+        = render :partial => 'answer', :collection => response.answers
