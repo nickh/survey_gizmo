@@ -31,6 +31,5 @@
           %li= link_to 'next question', new_response_answer_path(@response)
         - else
           %li= link_to 'your answers', response_path(@response)
-          |
           %li= link_to 'all answers', responses_path
     = yield

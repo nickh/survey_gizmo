@@ -15,10 +15,15 @@ li.odd
   background-color = !white
 
 ul.nav
-  float: right
+  float:   right
+  padding: 2px
   > li
-    font-size: 0.8em
-    display: inline
+    padding:      0px 0px 0px 3px
+    font-size:    0.8em
+    display:      inline
+    border-left = "1px dotted #{!dark_gray}"
+  > li:first-child
+    border-left:  none
 
 a
   text-decoration: none
